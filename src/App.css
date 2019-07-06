@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css?family=Lora|Mali&display=swap');
+body {
+  background: lightgray;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: lightgray;
+  flex-direction:column;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 20px 10px 20px;
+  background: linear-gradient(to bottom,steelblue 50%,transparent 100%);
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  font-family: 'Lora', serif;
+}
+.header h1{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.icon-pin {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background: white;
+  margin: -0.5em 0.3em 0 0;
+}
+.icon-pin::after {
+  display: block;
+  position: absolute;
+  content: "";
+  border: 0.5em solid transparent;
+  border-top: 1em solid white;
+  margin-top: 0.65em;
+}
+.icon-pin::before {
+  display: block;
+  position: absolute;
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  background: black;
+  border-radius: 50%;
+  margin: 0.25em;
+  z-index: 2;
+}
+main {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background: lightgray;
+  width: 100%;
+  height: 100vh;
+  background-size: cover !important;
+  flex-wrap: wrap;
+}
+main h2, main h3, main h4 {
+  margin: 10px 0;
+}
+.weather-today {
+  padding: 10px 30px;
+  border-radius: 15px;
+  background: rgba(0,70,120,0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.8);
+  box-shadow: 0 0 40px 10px rgba(0,70,120,0.4);
+  font-family: 'Mali', cursive;
+  margin: 10px 20px;
+  transition: 0.5s ease-in-out;
+}
+.temp-toggle {
+  opacity: 0;
+  position: absolute;
+}
+.toggle {
+  padding-left: 20px;
+}
+.toggle label{
+  display: flex;
+}
+.toggle label:hover,
+.toggle .temp-toggle:focus ~ label{
+  box-shadow: 0px 0px 10px 1px rgba(0,120,0,0.5);
+}
+.toggle label::before, .toggle label::after{
+  display: block;
+  content: '˚C';
+  position: relative;
+  background: lightgray;
+  color: black;
+  transition: 0.3s ease-out;
+  padding: 0.2em 0.3em 0.1em 0.3em;
+  font-size: 1.5em;
+  border-radius: 0.3em 0 0 0.3em;
+  cursor: pointer;
+}
+.toggle label::after {
+  content: '˚F';
+  border-radius: 0 0.3em 0.3em 0;
+  background: limegreen;
+  color: white;
+}
+.toggle .temp-toggle:checked ~ label::before {
+  background: limegreen;
+  color: white;
+}
+.toggle .temp-toggle:checked ~ label::after {
+  background: lightgray;
+  color: black;
+}
+footer{
+  position: fixed;
+  top: auto;
+  bottom: 0;
+  background: linear-gradient(to top,steelblue,transparent);
+  width: 100%;
+  text-align: center;
+  height: 70px;
+  z-index: 2;
+}
+footer h4 {
+  margin-top: 30px;
+}
+footer h5 {
+  margin-top: -20px;
+}
+footer a,
+footer a:active {
+  color: white;
+}
+.weather-coming {
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px 15px 15px;
+  border-radius: 15px;
+  background: rgba(0,120,70,0.4);
+  text-align: center;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.8);
+  box-shadow: 0 0 40px 10px rgba(0,120,70,0.4);
+  font-family: 'Mali', cursive;
+  margin: 0 10px;
+  transition: 0.5s ease-in-out;
+}
+.days {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.weekday {
+  padding: 0 10px;
+  border-radius: 5px;
+  margin: 0 5px;
+  background: rgba(0,70,0,0.3);
+}
+.show-coming {
+  display: none;
+  transition: 0.1s ease-out;
+}
+.offline {
+  filter: grayscale(70%);
+}
+.offline .header {
+  margin-top: 30px;
+}
+.offline::before {
+  content: 'Offline Mode';
+  font-size: 1.2em;
+  text-align: center;
+  display: block;
+  position: relative;
+  background: #f88;
+  color: maroon;
+  font-weight: bold;
+  width: 100vw;
+  line-height: 30px;
+}
+
+@media (max-width: 740px) {
+  main {
+    padding-top: 5em;
+  }
+  .header {
+    font-size: 0.8em;
+  }
+  .weather-coming {
+    filter: blur(8px);
+  }
+  .show-coming {
+    display: block;
+    position: relative;
+    width: 200px;
+    padding: 5px 0;
+    font-size: 1.3em;
+    font-weight: 500;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+  }
+  .show-coming::before {
+    position: relative;
+    top: -20px;
+    right: 5px;
+    content: "";
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom: 15px solid gray;
+  }
+  .show-coming:hover {
+    background: lightgray;
+  }
+}
