@@ -146,16 +146,27 @@ const useFetchtemp = (unit) => {
 // Fetch weather from API
 const fetchTemp = async (location, unit, setTemp, setLocationName, setWeather) => {
   const API_URL = "https://api.openweathermap.org/data/2.5/weather?lat=" + location.lat + "&lon=" + location.long + "&appid=" + API_ID;
-  const response = await fetch(API_URL);
-  const result = await response.json();
-  const { temp, temp_max, temp_min, humidity } = result.main;
-  const { name, sys, weather, wind } = result;
-  const { description, id } = weather[0];
-  const windSpeed = wind.speed;
-  setLocationName(name + ", " + sys.country);
-  setWeather({ description: description.toUpperCase(), windSpeed, humidity, id });
-  if (unit === '˚C') setTemp(fromKtoC([temp, temp_max, temp_min, true]));
-  else return setTemp(fromKtoF([temp, temp_max, temp_min, true]));
+  let result = null;
+  try {
+    const response = await fetch(API_URL);
+    result = await response.json();
+    localStorage.setItem("temp-data", JSON.stringify(result));
+  }
+  catch (e) {
+    document.querySelector(".container").classList.add("offline");
+    result = JSON.parse(localStorage.getItem("temp-data"));
+  }
+  if (result) {
+    const { temp, temp_max, temp_min, humidity } = result.main;
+    const { name, sys, weather, wind } = result;
+    const { description, id } = weather[0];
+    const windSpeed = wind.speed;
+    setLocationName(name + ", " + sys.country);
+    setWeather({ description: description.toUpperCase(), windSpeed, humidity, id });
+    if (unit === '˚C') setTemp(fromKtoC([temp, temp_max, temp_min, true]));
+    else return setTemp(fromKtoF([temp, temp_max, temp_min, true]));
+  }
+  else return null;
 }
 
 const useComingTemp = (unit, location) => {
@@ -175,9 +186,16 @@ const useComingTemp = (unit, location) => {
 // Fetch  Upcoming weather from API
 const fetchComingTemp = async (unit, location, setComingTemp, setComingWeather) => {
   const API_URL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + location.lat + "&lon=" + location.long + "&appid=" + API_ID;
+  let result = null;
   try {
     const response = await fetch(API_URL);
-    const result = await response.json();
+    result = await response.json();
+    localStorage.setItem("coming-temp-data", JSON.stringify(result));
+  }
+  catch (e) {
+    result = JSON.parse(localStorage.getItem("coming-temp-data"));
+  }
+  if (result) {
     const temps = [];
     const weather = [];
     for (let i = 1; i < 5; i++) {
@@ -188,9 +206,6 @@ const fetchComingTemp = async (unit, location, setComingTemp, setComingWeather) 
     if (unit === '˚C') setComingTemp(fromKtoC(temps));
     else setComingTemp(fromKtoF(temps));
     setComingWeather(weather);
-  }
-  catch (e) {
-    document.querySelector(".container").classList.add("offline");
   }
 }
 
