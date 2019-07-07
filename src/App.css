@@ -171,21 +171,23 @@ footer a:active {
 }
 .offline {
   filter: grayscale(70%);
+  height: 100vh;
 }
 .offline .header {
-  margin-top: 30px;
+  padding: 20px 20px 10px;
 }
-.offline::before {
-  content: 'Offline Mode';
+.offline .header::before {
+  content: "Offline Mode";
   font-size: 1.2em;
   text-align: center;
   display: block;
-  position: relative;
+  position: absolute;
   background: #f88;
   color: maroon;
-  font-weight: bold;
+  font-weight: 700;
   width: 100vw;
   line-height: 30px;
+  top: 0;
 }
 
 @media (max-width: 740px) {
