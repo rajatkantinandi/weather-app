@@ -3,7 +3,7 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox
 if (workbox) {
     workbox.routing.registerRoute(
         "/",
-        workbox.strategies.networkFirst()
+        workbox.strategies.StaleWhileRevalidate()
     );
     workbox.routing.registerRoute(
         new RegExp('/images/backgrounds/'),
@@ -13,7 +13,7 @@ if (workbox) {
         new RegExp('/favicon.png'),
         new workbox.strategies.StaleWhileRevalidate()
     );
-    workbox.routing.registerRoute(/\.(?:js|css|html)$/, workbox.strategies.networkFirst());
+    workbox.routing.registerRoute(/\.(?:js|css|html)$/, workbox.strategies.StaleWhileRevalidate());
 } else {
     console.log(`Boo! Workbox didn't load 😬`);
 }
