@@ -8,7 +8,7 @@ const { useState, useEffect, Fragment } = React;
 
 // Don't use this go to OpenWeatherMap.org & get yours for free, after free sign up. 
 // They have maximum usage limits so kindly don't use mine.
-const API_ID = "133daa16c23326f2af0d1603063dfea5";
+const API_ID = "d3975ec650c9e4b83851dea60d799302";
 
 export default function App(props) {
   const [unit, setUnit] = useState(localStorage.getItem('unit') || '˚C');
