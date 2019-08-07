@@ -107,7 +107,7 @@ export default function App(props) {
 
 const useFetchtemp = (unit) => {
   const [temps, setTemp] = useState(["---", "---", "---", false]);
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState(JSON.parse(localStorage.getItem('location')) || null);
   const [locationName, setLocationName] = useState('------');
   const [weather, setWeather] = useState({
     description: '-------',
@@ -121,11 +121,14 @@ const useFetchtemp = (unit) => {
     try {
       navigator.geolocation.getCurrentPosition(function (position) {
         //Get Location & Link
-        setLocation({
+        const locationToSet = {
           lat: position.coords.latitude,
           long: position.coords.longitude,
           name: null
-        });
+        };
+
+        setLocation(locationToSet);
+        localStorage.setItem('location', JSON.stringify(locationToSet));
       });
     }
     catch (e) {
