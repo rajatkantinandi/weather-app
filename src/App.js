@@ -12,9 +12,8 @@ const API_ID = "d3975ec650c9e4b83851dea60d799302";
 
 export default function App(props) {
   const [unit, setUnit] = useState(localStorage.getItem('unit') || '˚C');
-  const [temps, location, locationName, weather, setTemp] = useFetchtemp(unit);
+  const [temp, temps, location, locationName, weather, comingWeather, setTemp, setTemps] = useFetchtemp(unit);
   const [bgImageURL, setBgImageURL] = useState("lightgray");
-  const [comingTemps, comingWeather, setComingTemp] = useComingTemp(unit, location);
   const [mainTransform, setTransform] = useState(null);
   const [comingBtnDisplay, setComingBtnDisplay] = useState(null);
   const [upcomingFilter, setUpcomingFilter] = useState(null);
@@ -25,22 +24,17 @@ export default function App(props) {
   days = days.slice(today + 1, today + 5);
 
   const handleUnitChange = () => {
-    if (temps[3]) {
+    if (temp!=='---') {
       if (unit === '˚C') {
         setUnit('˚F');
         localStorage.setItem('unit', '˚F');
-        setTemp(fromCtoF(temps));
+        setTemps(temps.map(temps => temps.map(temp => fromCtoF(temp))));
+        setTemp(fromCtoF(temp));
       } else {
         setUnit('˚C');
         localStorage.setItem('unit', '˚C');
-        setTemp(fromFtoC(temps));
-      }
-    }
-    if (comingTemps[4]) {
-      if (unit === '˚C') {
-        setComingTemp(comingTemps.map(temp => fromCtoF(temp)));
-      } else {
-        setComingTemp(comingTemps.map(temp => fromFtoC(temp)));
+        setTemps(temps.map(temps => temps.map(temp => fromFtoC(temp))));
+        setTemp(fromFtoC(temp));
       }
     }
   }
@@ -88,16 +82,20 @@ export default function App(props) {
     <main style={{ background: bgImageURL }}>
       <section className="weather-today" style={{ transform: mainTransform }}>
         <h2>Now</h2>
-        <h2>{temps[0]} {unit}</h2>
+        <h2>{temp} {unit}</h2>
         <h2>{weather.description}</h2>
-        <h3><span className="arrow up"></span>Max: {temps[1]} {unit} &nbsp; <span className="arrow down"></span>Min: {temps[2]} {unit}</h3>
+        <h3><span className="arrow up"></span>
+          Max: {temps[0][0]} {unit} &nbsp;
+        <span className="arrow down"></span>
+          Min: {temps[0][1]} {unit}
+        </h3>
         <h4>Humidity: {weather.humidity}%, Wind Speed: {weather.windSpeed}m/s</h4>
         <button className="show-coming" onClick={handleComing} style={{ display: comingBtnDisplay }}>Show Next Days</button>
       </section>
       <section className="weather-coming" style={{ filter: upcomingFilter, transform: mainTransform }}>
         <h2>This Week</h2>
         <div className="days">
-          {days.map((day, idx) => <DayWeather {...{ day, unit }} temp={comingTemps[idx]} weather={comingWeather[idx]} key={idx} />)}
+          {days.map((day, idx) => <DayWeather {...{ day, unit }} temp={temps[idx + 1]} weather={comingWeather[idx + 1]} key={idx} />)}
         </div>
       </section>
     </main>
@@ -106,7 +104,9 @@ export default function App(props) {
 }
 
 const useFetchtemp = (unit) => {
-  const [temps, setTemp] = useState(["---", "---", "---", false]);
+  const [temp,setTemp] = useState('---');
+  const [temps, setTemps] = useState([['--', '--'], ['--', '--'], ['--', '--'], ['--', '--'], ['--', '--'], null]);
+  const [comingWeather, setComingWeather] = useState(['--','--', '--', '--', '--']);
   const [location, setLocation] = useState(JSON.parse(localStorage.getItem('location')) || null);
   const [locationName, setLocationName] = useState('------');
   const [weather, setWeather] = useState({
@@ -123,8 +123,7 @@ const useFetchtemp = (unit) => {
         //Get Location & Link
         const locationToSet = {
           lat: position.coords.latitude,
-          long: position.coords.longitude,
-          name: null
+          long: position.coords.longitude
         };
 
         setLocation(locationToSet);
@@ -139,15 +138,32 @@ const useFetchtemp = (unit) => {
   // Fetch the weather when location is updated
   useEffect(() => {
     if (location) {
-      fetchTemp(location, unit, setTemp, setLocationName, setWeather);
+      setCombinedTemps(unit, location, setLocationName, setWeather, setComingWeather, setTemps, setTemp);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location])
-  return [temps, location, locationName, weather, setTemp];
+  return [temp, temps, location, locationName, weather, comingWeather, setTemp, setTemps];
+}
+
+const setCombinedTemps = async (unit, location, setLocationName, setWeather, setComingWeather, setTemps, setTemp) => {
+  let { temp, temp_max, temp_min, locationName, weather } = await fetchTemp(location);
+  let { comingTemps, comingWeather } = await fetchComingTemp(location);
+  comingTemps[0][0] = Math.max(temp_max,comingTemps[0][0]);
+  comingTemps[0][1] = Math.min(temp_min,comingTemps[0][1]);
+  setLocationName(locationName);
+  setWeather(weather);
+  setTemp(getTempInUnit(unit,temp));
+  setComingWeather(comingWeather);
+  setTemps(comingTemps.map(temps => temps.map(temp => getTempInUnit(unit,temp))));
+}
+
+const getTempInUnit = (unit,tempInK) => {
+  if(unit==='˚C') return fromKtoC(tempInK);
+  if(unit==='˚F') return fromKtoF(tempInK);
 }
 
 // Fetch weather from API
-const fetchTemp = async (location, unit, setTemp, setLocationName, setWeather) => {
+const fetchTemp = async (location) => {
   const API_URL = "https://api.openweathermap.org/data/2.5/weather?lat=" + location.lat + "&lon=" + location.long + "&appid=" + API_ID;
   let result = null;
   try {
@@ -164,30 +180,19 @@ const fetchTemp = async (location, unit, setTemp, setLocationName, setWeather) =
     const { name, sys, weather, wind } = result;
     const { description, id } = weather[0];
     const windSpeed = wind.speed;
-    setLocationName(name + ", " + sys.country);
-    setWeather({ description: description.toUpperCase(), windSpeed, humidity, id });
-    if (unit === '˚C') setTemp(fromKtoC([temp, temp_max, temp_min, true]));
-    else return setTemp(fromKtoF([temp, temp_max, temp_min, true]));
+    return {
+      temp,
+      temp_max,
+      temp_min,
+      locationName: name + ", " + sys.country,
+      weather: { description: description.toUpperCase(), windSpeed, humidity, id }
+    }
   }
   else return null;
 }
 
-const useComingTemp = (unit, location) => {
-  const [comingTemp, setComingTemp] = useState([['--', '--'], ['--', '--'], ['--', '--'], ['--', '--'], null]);
-  const [comingWeather, setComingWeather] = useState(['--', '--', '--', '--']);
-
-  useEffect(() => {
-    if (location) {
-      fetchComingTemp(unit, location, setComingTemp, setComingWeather);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
-
-  return [comingTemp, comingWeather, setComingTemp];
-}
-
 // Fetch  Upcoming weather from API
-const fetchComingTemp = async (unit, location, setComingTemp, setComingWeather) => {
+const fetchComingTemp = async (location) => {
   const API_URL = "https://api.openweathermap.org/data/2.5/forecast?lat=" + location.lat + "&lon=" + location.long + "&appid=" + API_ID;
   let result = null;
   try {
@@ -199,27 +204,24 @@ const fetchComingTemp = async (unit, location, setComingTemp, setComingWeather) 
     result = JSON.parse(localStorage.getItem("coming-temp-data"));
   }
   if (result) {
-    const temps = [];
-    const weather = [];
-    console.log(result.list.length);
+    const comingTemps = [];
+    const comingWeather = [];
     for (let i = 1; i <= 5; i++) {
       let tempsOfTheDay = result.list.slice(8 * (i - 1), 8 * i)
         .map(({ main: { temp_max, temp_min } }) => ([temp_max, temp_min]));
       const maxTemps = tempsOfTheDay.map(temp => temp[0]);
       const minTemps = tempsOfTheDay.map(temp => temp[1]);
-      temps.push([Math.max(...maxTemps), Math.min(...minTemps)]);
-      weather.push(result.list[8 * (i - 1)].weather[0].main);
+      comingTemps.push([Math.max(...maxTemps), Math.min(...minTemps)]);
+      comingWeather.push(result.list[8 * (i - 1)].weather[0].main);
     }
-    if (unit === '˚C') setComingTemp(temps.map(temp => fromKtoC(temp)));
-    else setComingTemp(temps.map(temp => fromKtoF(temp)));
-    temps.push([]);
-    setComingWeather(weather);
+    comingTemps.push([]);
+    return { comingTemps, comingWeather };
   }
 }
 
-const fromKtoC = (temps) => temps.map(temp => (temp - 273).toFixed(1));
-const fromKtoF = (temps) => temps.map(temp => ((temp - 273) * 1.8 + 32).toFixed(1));
+const fromKtoC = temp => (temp - 273).toFixed(1);
+const fromKtoF = temp => ((temp - 273) * 1.8 + 32).toFixed(1);
 
 
-const fromCtoF = (temps) => temps.map(temp => (1.8 * temp + 32).toFixed(1));
-const fromFtoC = (temps) => temps.map(temp => ((temp - 32) / 1.8).toFixed(1));
+const fromCtoF = temp => (1.8 * temp + 32).toFixed(1);
+const fromFtoC = temp => ((temp - 32) / 1.8).toFixed(1);
