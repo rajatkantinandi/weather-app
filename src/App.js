@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
+import WeatherNow from './Components/WeatherNow';
 import DayWeather from './Components/DayWeather';
 import { fromCtoF, fromFtoC } from './helpers/tempHelper';
 import useFetchTemp from './hooks/useFetchTemp';
@@ -16,9 +17,8 @@ export default function App(props) {
   const [unit, setUnit] = useState(localStorage.getItem('unit') || '˚C');
   const [temp, temps, location, locationName, weather, comingWeather, setTemp, setTemps] = useFetchTemp(unit);
   const bgImageURL = useBgImageURL(weather.id);
-  const [mainTransform, setTransform] = useState(null);
-  const [comingBtnDisplay, setComingBtnDisplay] = useState(null);
   const [upcomingFilter, setUpcomingFilter] = useState(null);
+  const [mainTransform, setTransform] = useState(null);
 
   let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   days = [...days, ...days];
@@ -41,27 +41,10 @@ export default function App(props) {
     }
   }
 
-  const handleComing = () => {
-    setTransform('translateY(-135px)');
-    setComingBtnDisplay('none');
-    setUpcomingFilter('blur(0px)');
-  }
-
   return <Fragment>
     <Header {...{ locationName, unit, handleUnitChange }} />
     <main style={{ background: bgImageURL }}>
-      <section className="weather-today" style={{ transform: mainTransform }}>
-        <h2>Now</h2>
-        <h2>{temp} {unit}</h2>
-        <h2>{weather.description}</h2>
-        <h3><span className="arrow up"></span>
-          Max: {temps[0][0]} {unit} &nbsp;
-        <span className="arrow down"></span>
-          Min: {temps[0][1]} {unit}
-        </h3>
-        <h4>Humidity: {weather.humidity}%, Wind Speed: {weather.windSpeed}m/s</h4>
-        <button className="show-coming" onClick={handleComing} style={{ display: comingBtnDisplay }}>Show Next Days</button>
-      </section>
+      <WeatherNow {...{ temp, temps, unit, weather, setUpcomingFilter, mainTransform, setTransform }} />
       <section className="weather-coming" style={{ filter: upcomingFilter, transform: mainTransform }}>
         <h2>This Week</h2>
         <div className="days">
@@ -69,6 +52,6 @@ export default function App(props) {
         </div>
       </section>
     </main>
-    <Footer {...{ location, handleComing, comingBtnDisplay }} />
+    <Footer {...{ location }} />
   </Fragment>;
 }
