@@ -5,7 +5,8 @@ export default function DayWeather(props) {
 
     return <div className="weekday">
         <h3>{day}</h3>
-        <h5>{temp} {unit}</h5>
-        <h5>{weather}</h5>
+        <h5><span className="arrow up"></span>{temp[0]} {unit}</h5>
+        <h5><span className="arrow down"></span>{temp[1]} {unit}</h5>
+        <h4 className="weather">{weather}</h4>
     </div>;
 }

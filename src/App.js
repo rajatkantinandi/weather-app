@@ -38,9 +38,9 @@ export default function App(props) {
     }
     if (comingTemps[4]) {
       if (unit === '˚C') {
-        setComingTemp(fromCtoF(comingTemps));
+        setComingTemp(comingTemps.map(temp => fromCtoF(temp)));
       } else {
-        setComingTemp(fromFtoC(comingTemps));
+        setComingTemp(comingTemps.map(temp => fromFtoC(temp)));
       }
     }
   }
@@ -87,15 +87,15 @@ export default function App(props) {
     <Header {...{ locationName, unit, handleUnitChange }} />
     <main style={{ background: bgImageURL }}>
       <section className="weather-today" style={{ transform: mainTransform }}>
-        <h2>Today</h2>
+        <h2>Now</h2>
         <h2>{temps[0]} {unit}</h2>
         <h2>{weather.description}</h2>
-        <h3>Max: {temps[1]} {unit} &amp; Min: {temps[2]} {unit}</h3>
+        <h3><span className="arrow up"></span>Max: {temps[1]} {unit} &nbsp; <span className="arrow down"></span>Min: {temps[2]} {unit}</h3>
         <h4>Humidity: {weather.humidity}%, Wind Speed: {weather.windSpeed}m/s</h4>
-        <button className="show-coming" onClick={handleComing} style={{ display: comingBtnDisplay }}>Show Upcoming</button>
+        <button className="show-coming" onClick={handleComing} style={{ display: comingBtnDisplay }}>Show Next Days</button>
       </section>
       <section className="weather-coming" style={{ filter: upcomingFilter, transform: mainTransform }}>
-        <h2>UpComing</h2>
+        <h2>This Week</h2>
         <div className="days">
           {days.map((day, idx) => <DayWeather {...{ day, unit }} temp={comingTemps[idx]} weather={comingWeather[idx]} key={idx} />)}
         </div>
@@ -173,7 +173,7 @@ const fetchTemp = async (location, unit, setTemp, setLocationName, setWeather) =
 }
 
 const useComingTemp = (unit, location) => {
-  const [comingTemp, setComingTemp] = useState(['--', '--', '--', '--', false]);
+  const [comingTemp, setComingTemp] = useState([['--', '--'], ['--', '--'], ['--', '--'], ['--', '--'], null]);
   const [comingWeather, setComingWeather] = useState(['--', '--', '--', '--']);
 
   useEffect(() => {
@@ -201,13 +201,18 @@ const fetchComingTemp = async (unit, location, setComingTemp, setComingWeather) 
   if (result) {
     const temps = [];
     const weather = [];
-    for (let i = 1; i < 5; i++) {
-      temps.push(result.list[8 * i].main.temp);
-      weather.push(result.list[8 * i].weather[0].main);
+    console.log(result.list.length);
+    for (let i = 1; i <= 5; i++) {
+      let tempsOfTheDay = result.list.slice(8 * (i - 1), 8 * i)
+        .map(({ main: { temp_max, temp_min } }) => ([temp_max, temp_min]));
+      const maxTemps = tempsOfTheDay.map(temp => temp[0]);
+      const minTemps = tempsOfTheDay.map(temp => temp[1]);
+      temps.push([Math.max(...maxTemps), Math.min(...minTemps)]);
+      weather.push(result.list[8 * (i - 1)].weather[0].main);
     }
-    temps.push(true);
-    if (unit === '˚C') setComingTemp(fromKtoC(temps));
-    else setComingTemp(fromKtoF(temps));
+    if (unit === '˚C') setComingTemp(temps.map(temp => fromKtoC(temp)));
+    else setComingTemp(temps.map(temp => fromKtoF(temp)));
+    temps.push([]);
     setComingWeather(weather);
   }
 }
