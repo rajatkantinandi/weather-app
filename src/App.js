@@ -7,6 +7,7 @@ import WeekWeather from './Components/WeekWeather';
 import { fromCtoF, fromFtoC } from './helpers/tempHelper';
 import useFetchTemp from './hooks/useFetchTemp';
 import useBgImageURL from './hooks/useBgImageURL';
+import useAQI from './hooks/useAQI';
 
 const { useState, Fragment } = React;
 
@@ -19,6 +20,7 @@ export default function App(props) {
   const bgImageURL = useBgImageURL(weather.id);
   const [upcomingFilter, setUpcomingFilter] = useState(null);
   const [mainTransform, setTransform] = useState(null);
+  const { aqi, cityName } = useAQI(location);
 
   const handleUnitChange = () => {
     if (temp !== '---') {
@@ -39,7 +41,7 @@ export default function App(props) {
   return <Fragment>
     <Header {...{ locationName, unit, handleUnitChange }} />
     <main style={{ background: bgImageURL }}>
-      <WeatherNow {...{ temp, temps, unit, weather, setUpcomingFilter, mainTransform, setTransform }} />
+      <WeatherNow {...{ temp, temps, unit, weather, setUpcomingFilter, mainTransform, setTransform, aqi, cityName }} />
       <WeekWeather {...{ temps, unit, comingWeather, upcomingFilter, mainTransform }} />
     </main>
     <Footer {...{ location }} />

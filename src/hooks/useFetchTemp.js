@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fromKtoC, fromKtoF } from '../helpers/tempHelper';
-import { API_ID } from '../constants/api'
+import { API_ID } from '../constants/api';
 
 const useFetchTemp = (unit) => {
     const [temp, setTemp] = useState('---');
