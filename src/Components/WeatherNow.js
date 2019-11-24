@@ -15,8 +15,8 @@ export default function WeatherNow({ temp, unit, weather, temps, setUpcomingFilt
             <h2>{temp} {unit}</h2>
             <h2>{weather.description}</h2>
             <h3>
-                <span className="arrow up"></span> Max: {temps[0][0]}{unit} &nbsp;
-                <span className="arrow down"></span> Min: {temps[0][1]}{unit}
+                <span className="arrow up"></span>Max: {temps[0][0]}{unit} &nbsp;
+                <span className="arrow down"></span>Min: {temps[0][1]}{unit}
             </h3>
             <h4>Humidity: {weather.humidity}%, Wind Speed: {weather.windSpeed}m/s</h4>
             {aqi &&

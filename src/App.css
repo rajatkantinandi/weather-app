@@ -240,7 +240,6 @@ footer a:active {
 .arrow::before {
   position: relative;
   display: inline;
-  margin-right: 5px;
 }
 
 .arrow.up::before {
