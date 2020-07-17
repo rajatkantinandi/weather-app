@@ -6,13 +6,13 @@ export default function Footer(props) {
   return (
     <footer>
       {location ? (
-        <h4>
-          Latitude: {location.lat.toFixed(3)}, Longitude: {location.long.toFixed(3)}{' '}
-        </h4>
+        <div>
+          Latitude: {location.lat.toFixed(3)}, Longitude: {location.long.toFixed(3)}
+        </div>
       ) : (
         'Latitude: ..., Longitude: ...'
       )}
-      <h5>
+      <div>
         Using{' '}
         <a href="https://api.openweathermap.org" target="_blank" rel="noreferrer noopener">
           Openweathermap.org
@@ -22,7 +22,7 @@ export default function Footer(props) {
           aqicn.org
         </a>{' '}
         API
-      </h5>
+      </div>
     </footer>
   );
 }

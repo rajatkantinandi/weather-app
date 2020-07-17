@@ -22,27 +22,44 @@ export default function WeatherNow({
   return (
     <section className="weather-today" style={{ transform: mainTransform }}>
       <h2>Now</h2>
-      <h2>
+      <div className="todaysHighlight data">
         {temp}
         <span className="unit">{unit}</span>
-      </h2>
-      <h2>{weather.description}</h2>
-      <h3>
-        <span className="arrow up"></span>Max: {temps[0][0]}
-        <span className="unit">{unit}</span> &nbsp;
-        <span className="arrow down"></span>Min: {temps[0][1]}
-        <span className="unit">{unit}</span>
-      </h3>
-      <h4>
-        Humidity: {weather.humidity}%, Wind Speed: {weather.windSpeed}m/s
-      </h4>
+      </div>
+      <div className="todaysHighlight data">{weather.description}</div>
+      <div className="maxMin dataBlock">
+        <span>
+          <span className="arrow up"></span>
+          <h3>Max:</h3>{' '}
+          <span className="data">
+            {temps[0][0]}
+            <span className="unit">{unit}</span>
+          </span>
+        </span>
+        <span>
+          <span className="arrow down"></span>
+          <h3>Min:</h3>{' '}
+          <span className="data">
+            {temps[0][1]}
+            <span className="unit">{unit}</span>
+          </span>
+        </span>
+      </div>
+      <div className="misc dataBlock">
+        <span>
+          <h3>Humidity:</h3> <span className="data">{weather.humidity}%</span>
+        </span>
+        <span>
+          <h3>Wind Speed:</h3> <span className="data">{weather.windSpeed}m/s</span>
+        </span>
+      </div>
       {aqi && (
-        <h4 className="aqiData">
+        <div className="aqiData dataBlock">
           <div>
-            Air Quality Index: <span className={'aqi ' + getAQIClass(aqi)}>{aqi}</span>
+            <h3>Air Quality Index:</h3> <span className={'aqi ' + getAQIClass(aqi)}>{aqi}</span>
           </div>
-          <div>({cityName})</div>
-        </h4>
+          <div className="dataBlock">({cityName})</div>
+        </div>
       )}
       <button className="show-coming" onClick={handleComing} style={{ display: comingBtnDisplay }}>
         Show Next Days

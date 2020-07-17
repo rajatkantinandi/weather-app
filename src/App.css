@@ -95,7 +95,33 @@ main h4 {
   transition: 0.5s ease-in-out;
 }
 
-.weather-today h4,
+.todaysHighlight {
+  font-size: 1.4rem;
+  line-height: 1.8em;
+}
+
+.data {
+  text-shadow: 0 1px 7px #433;
+  font-weight: bold;
+  color: #eaecfa;
+}
+
+.dataBlock h3 {
+  display: inline;
+}
+
+.misc h3 {
+  font-size: 1rem;
+}
+
+.dataBlock {
+  margin: 5px 0;
+}
+
+.dataBlock > span {
+  margin: 0 5px;
+}
+
 .weather-today h3 {
   white-space: nowrap;
 }
@@ -166,14 +192,11 @@ footer {
   text-align: center;
   height: 70px;
   z-index: 2;
+  font-weight: bold;
 }
 
-footer h4 {
+footer > *:first-child {
   margin-top: 30px;
-}
-
-footer h5 {
-  margin-top: -20px;
 }
 
 footer a,
@@ -184,7 +207,7 @@ footer a:active {
 .weather-coming {
   display: flex;
   flex-direction: column;
-  padding: 0 15px 15px 15px;
+  padding: 5px 15px 30px 15px;
   border-radius: 15px;
   background: rgba(0, 120, 70, 0.4);
   text-align: center;
@@ -208,9 +231,13 @@ footer a:active {
   background: rgba(0, 70, 0, 0.3);
 }
 
-.weekday h5 {
-  margin: 0;
+.weekday .data {
+  line-height: 1.4rem;
   white-space: nowrap;
+}
+
+.weekday .weather {
+  margin-top: 10px;
 }
 
 .show-coming {
@@ -260,17 +287,28 @@ footer a:active {
   color: orangered;
 }
 
+.aqiData {
+  margin-top: 15px;
+  padding-top: 8px;
+  border-top: 1.5px solid rgba(100, 110, 90, 0.7);
+  width: 100%;
+}
+
+.aqiData h3 {
+  font-size: 1rem;
+}
+
 .aqiData div {
   text-align: center;
   margin-bottom: 5px;
 }
 
 .aqi {
-  padding: 3px 8px;
+  padding: 0 6px 3px 6px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   background: green;
   box-shadow: 0 0 5px 0 rgba(250, 250, 250, 0.3);
-  border-radius: 10px;
+  border-radius: 5px/15px;
   box-sizing: border-box;
   margin: 5px;
 }
@@ -290,11 +328,13 @@ footer a:active {
 .aqi.yellow {
   background: gold;
   color: black;
+  text-shadow: none;
 }
 
 .aqi.orange {
   background: orange;
   color: black;
+  text-shadow: none;
 }
 
 @media (max-width: 740px) {
