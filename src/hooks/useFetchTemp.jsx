@@ -70,6 +70,7 @@ const fetchTemp = async (location) => {
     '&appid=' +
     API_ID;
   let result = null;
+
   try {
     const response = await fetch(API_URL);
     result = await response.json();
@@ -78,6 +79,7 @@ const fetchTemp = async (location) => {
     document.querySelector('.container').classList.add('offline');
     result = JSON.parse(localStorage.getItem('temp-data'));
   }
+
   if (result) {
     const { temp, temp_max, temp_min, humidity } = result.main;
     const { name, sys, weather, wind } = result;
@@ -90,7 +92,9 @@ const fetchTemp = async (location) => {
       locationName: name + ', ' + sys.country,
       weather: { description: description.toUpperCase(), windSpeed, humidity, id },
     };
-  } else return null;
+  } else {
+    return null;
+  }
 };
 
 // Fetch  Upcoming weather from API
@@ -103,6 +107,7 @@ const fetchComingTemp = async (location) => {
     '&appid=' +
     API_ID;
   let result = null;
+
   try {
     const response = await fetch(API_URL);
     result = await response.json();
@@ -110,9 +115,11 @@ const fetchComingTemp = async (location) => {
   } catch (e) {
     result = JSON.parse(localStorage.getItem('coming-temp-data'));
   }
+
   if (result) {
     const comingTemps = [];
     const comingWeather = [];
+
     for (let i = 1; i <= 5; i++) {
       let tempsOfTheDay = result.list
         .slice(8 * (i - 1), 8 * i)
@@ -122,7 +129,9 @@ const fetchComingTemp = async (location) => {
       comingTemps.push([Math.max(...maxTemps), Math.min(...minTemps)]);
       comingWeather.push(result.list[8 * (i - 1)].weather[0].main);
     }
+
     comingTemps.push([]);
+
     return { comingTemps, comingWeather };
   }
 };

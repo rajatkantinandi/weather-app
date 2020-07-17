@@ -22,7 +22,9 @@ export default function useAQI(location) {
       result = JSON.parse(localStorage.getItem('aqi-data'));
     }
 
-    if (result) setData(result);
+    if (result) {
+      setData(result);
+    }
   };
 
   const {

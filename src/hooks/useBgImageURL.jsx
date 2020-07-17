@@ -6,6 +6,7 @@ const useBgImageURL = (imgId) => {
   useEffect(() => {
     if (imgId) {
       let baseImageURL = process.env.PUBLIC_URL + '/images/backgrounds/';
+
       if (imgId >= 200 && imgId < 300) {
         setBgImageURL('url(' + baseImageURL + 'thunderstorm.jpg)');
       } else if (imgId >= 300 && imgId < 400) {
@@ -21,6 +22,7 @@ const useBgImageURL = (imgId) => {
       } else if (imgId > 800 && imgId < 900) {
         setBgImageURL('url(' + baseImageURL + 'cloudy.jpg)');
       }
+
       if (imgId >= 900) {
         setBgImageURL('url(' + baseImageURL + 'tornado.jpg)');
       }
