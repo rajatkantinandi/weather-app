@@ -11,11 +11,11 @@ import useAQI from './hooks/useAQI';
 
 const { useState, Fragment } = React;
 
-// Don't use this go to OpenWeatherMap.org & get yours for free, after free sign up. 
+// Don't use this go to OpenWeatherMap.org & get yours for free, after free sign up.
 // They have maximum usage limits so kindly don't use mine.
 
 export default function App(props) {
-  const [unit, setUnit] = useState(localStorage.getItem('unit') || '˚C');
+  const [unit, setUnit] = useState(localStorage.getItem('unit') || 'C');
   const [temp, temps, location, locationName, weather, comingWeather, setTemp, setTemps] = useFetchTemp(unit);
   const bgImageURL = useBgImageURL(weather.id);
   const [upcomingFilter, setUpcomingFilter] = useState(null);
@@ -24,26 +24,30 @@ export default function App(props) {
 
   const handleUnitChange = () => {
     if (temp !== '---') {
-      if (unit === '˚C') {
-        setUnit('˚F');
-        localStorage.setItem('unit', '˚F');
-        setTemps(temps.map(temps => temps.map(temp => fromCtoF(temp))));
+      if (unit === 'C') {
+        setUnit('F');
+        localStorage.setItem('unit', 'F');
+        setTemps(temps.map((temps) => temps.map((temp) => fromCtoF(temp))));
         setTemp(fromCtoF(temp));
       } else {
-        setUnit('˚C');
-        localStorage.setItem('unit', '˚C');
-        setTemps(temps.map(temps => temps.map(temp => fromFtoC(temp))));
+        setUnit('C');
+        localStorage.setItem('unit', 'C');
+        setTemps(temps.map((temps) => temps.map((temp) => fromFtoC(temp))));
         setTemp(fromFtoC(temp));
       }
     }
-  }
+  };
 
-  return <Fragment>
-    <Header {...{ locationName, unit, handleUnitChange }} />
-    <main style={{ background: bgImageURL }}>
-      <WeatherNow {...{ temp, temps, unit, weather, setUpcomingFilter, mainTransform, setTransform, aqi, cityName }} />
-      <WeekWeather {...{ temps, unit, comingWeather, upcomingFilter, mainTransform }} />
-    </main>
-    <Footer {...{ location }} />
-  </Fragment>;
+  return (
+    <Fragment>
+      <Header {...{ locationName, unit, handleUnitChange }} />
+      <main style={{ background: bgImageURL }}>
+        <WeatherNow
+          {...{ temp, temps, unit, weather, setUpcomingFilter, mainTransform, setTransform, aqi, cityName }}
+        />
+        <WeekWeather {...{ temps, unit, comingWeather, upcomingFilter, mainTransform }} />
+      </main>
+      <Footer {...{ location }} />
+    </Fragment>
+  );
 }
