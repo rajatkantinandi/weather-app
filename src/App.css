@@ -118,6 +118,13 @@ main h4 {
   margin: 5px 0;
 }
 
+.misc,
+.maxMin {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
 .dataBlock > span {
   margin: 0 5px;
 }
