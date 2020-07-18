@@ -337,6 +337,39 @@ footer a:active {
   text-shadow: none;
 }
 
+.updateBanner {
+  display: flex;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 10px;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: hotpink;
+  top: auto;
+  bottom: 0;
+  z-index: 2;
+}
+
+.updateBanner .refresh-btn {
+  padding: 5px 15px;
+  border-radius: 15px;
+  font-size: 1.1em;
+  color: white;
+  background-color: teal;
+  font-weight: bold;
+  border: none;
+  margin-left: 10px;
+  box-sizing: border-box;
+}
+
+.updateBanner .refresh-btn:hover,
+.updateBanner .refresh-btn:focus {
+  background-color: darkgreen;
+}
+
 @media (max-width: 740px) {
   main {
     padding-top: 5em;
