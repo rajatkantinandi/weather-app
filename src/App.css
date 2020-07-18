@@ -338,12 +338,14 @@ footer a:active {
 }
 
 .updateBanner {
+  display: flex;
   position: fixed;
   background: rgba(0, 0, 0, 0.85);
   padding: 10px;
   left: 0;
   right: 0;
-  text-align: center;
+  justify-content: center;
+  align-items: center;
   font-weight: bold;
   color: hotpink;
   top: auto;
@@ -406,10 +408,5 @@ footer a:active {
 
   .show-coming:hover {
     background: lightgray;
-  }
-
-  .updateBanner {
-    display: flex;
-    text-align: left;
   }
 }
