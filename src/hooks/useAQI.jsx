@@ -6,7 +6,9 @@ export default function useAQI(location) {
   const [data, setData] = useState({ data: { aqi: null, city: { name: null } } });
 
   useEffect(() => {
-    fetchAQI();
+    if (location) {
+      fetchAQI();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 

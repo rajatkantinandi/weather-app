@@ -8,6 +8,8 @@ import { fromCtoF, fromFtoC } from './helpers/tempHelper';
 import useFetchTemp from './hooks/useFetchTemp';
 import useBgImageURL from './hooks/useBgImageURL';
 import useAQI from './hooks/useAQI';
+import useVersionInfo from './hooks/useVersionInfo';
+import AppUpdateBanner from './Components/AppUpdateBanner';
 
 const { useState, Fragment } = React;
 
@@ -21,6 +23,7 @@ export default function App(props) {
   const [upcomingFilter, setUpcomingFilter] = useState(null);
   const [mainTransform, setTransform] = useState(null);
   const { aqi, cityName } = useAQI(location);
+  const { isUpToDate } = useVersionInfo();
 
   const handleUnitChange = () => {
     if (temp !== '---') {
@@ -48,6 +51,7 @@ export default function App(props) {
         <WeekWeather {...{ temps, unit, comingWeather, upcomingFilter, mainTransform }} />
       </main>
       <Footer {...{ location }} />
+      {!isUpToDate && <AppUpdateBanner />}
     </Fragment>
   );
 }
