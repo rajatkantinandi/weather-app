@@ -5,11 +5,13 @@ export default function useVersionInfo() {
 
   useEffect(() => {
     if (wasUpToDate()) {
-      fetch('/version.json')
-        .then((versionJSON) => versionJSON.json())
-        .then((versionString) => {
+      fetch('/manifest.json')
+        .then((response) => response.json())
+        .then((versionJSON) => {
+          const { version } = versionJSON;
           const localVersion = getLocalVersion();
-          if (versionString !== localVersion) {
+
+          if (version !== localVersion) {
             console.log('## The app is out of date & needs update!');
             setIsUpToDate(false);
             localStorage.setItem('wasUpToDate', false);
@@ -18,7 +20,7 @@ export default function useVersionInfo() {
             setIsUpToDate(true);
           }
 
-          localStorage.setItem('version', versionString);
+          localStorage.setItem('version', version);
         })
         .catch((err) => {
           console.log('App offline, assuming up to date');
