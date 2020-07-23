@@ -18,7 +18,19 @@ const { useState, Fragment } = React;
 
 export default function App(props) {
   const [unit, setUnit] = useState(localStorage.getItem('unit') || 'C');
-  const [temp, temps, location, locationName, weather, comingWeather, setTemp, setTemps] = useFetchTemp(unit);
+  const {
+    temp,
+    temps,
+    location,
+    locationName,
+    weather,
+    comingWeather,
+    setTemp,
+    setTemps,
+    updateDate,
+    isUpdating,
+    updateTime,
+  } = useFetchTemp(unit);
   const bgImageURL = useBgImageURL(weather.id);
   const [upcomingFilter, setUpcomingFilter] = useState(null);
   const [mainTransform, setTransform] = useState(null);
@@ -44,11 +56,24 @@ export default function App(props) {
   return (
     <Fragment>
       <Header {...{ locationName, unit, handleUnitChange }} />
+      {isUpdating && <aside className="updating">Updating data...</aside>}
       <main style={{ background: bgImageURL }}>
         <WeatherNow
-          {...{ temp, temps, unit, weather, setUpcomingFilter, mainTransform, setTransform, aqi, cityName }}
+          {...{
+            temp,
+            temps,
+            unit,
+            weather,
+            setUpcomingFilter,
+            mainTransform,
+            setTransform,
+            aqi,
+            cityName,
+            updateDate,
+            updateTime,
+          }}
         />
-        <WeekWeather {...{ temps, unit, comingWeather, upcomingFilter, mainTransform }} />
+        <WeekWeather {...{ temps, unit, comingWeather, upcomingFilter, mainTransform, updateDate }} />
       </main>
       <Footer {...{ location }} />
       {!isUpToDate && <AppUpdateBanner />}

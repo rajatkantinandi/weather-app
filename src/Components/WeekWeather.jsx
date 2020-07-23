@@ -1,12 +1,22 @@
 import React from 'react';
 import DayWeather from './DayWeather';
 
-let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-days = [...days, ...days];
-const today = new Date().getDay();
-days = days.slice(today + 1, today + 5);
+function getDays(updateDate) {
+  let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  days = [...days, ...days];
+  let today = new Date().getDay();
 
-export default function WeekWeather({ unit, temps, comingWeather, upcomingFilter, mainTransform }) {
+  if (updateDate) {
+    today = new Date(updateDate).getDay();
+    console.log(today);
+  }
+
+  return days.slice(today + 1, today + 5);
+}
+
+export default function WeekWeather({ unit, temps, comingWeather, upcomingFilter, mainTransform, updateDate }) {
+  const days = getDays(updateDate);
+
   return (
     <section className="weather-coming" style={{ filter: upcomingFilter, transform: mainTransform }}>
       <h2>This Week</h2>

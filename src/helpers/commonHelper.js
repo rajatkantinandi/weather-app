@@ -13,3 +13,7 @@ export const truncate = (text, length) => {
     }
   }
 };
+
+export const padZero = (digit) => {
+  return digit < 10 ? '0' + digit : digit;
+};
