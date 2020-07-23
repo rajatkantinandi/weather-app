@@ -6,7 +6,7 @@
   "display": "fullscreen",
   "Scope": "/",
   "start_url": "/",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "icons": [
     {
       "src": "images/icons/icon-72x72.png",
