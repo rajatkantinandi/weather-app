@@ -8,7 +8,6 @@ function getDays(updateDate) {
 
   if (updateDate) {
     today = new Date(updateDate).getDay();
-    console.log(today);
   }
 
   return days.slice(today + 1, today + 5);

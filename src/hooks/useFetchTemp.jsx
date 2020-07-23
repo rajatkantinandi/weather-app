@@ -22,7 +22,7 @@ const useFetchTemp = (unit) => {
   // Fetch the weather from localStorage if localStorage has location & data
   useEffect(() => {
     if (location) {
-      getCombinedTemps({}, true).then((tempData) => setTempData(tempData));
+      getCombinedTemps(location, true).then((tempData) => setTempData(tempData));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -41,7 +41,7 @@ const useFetchTemp = (unit) => {
         localStorage.setItem('location', JSON.stringify(locationToSet));
         // Fetch data from api based on updated location
         setIsUpdating(true);
-        getCombinedTemps(location).then((tempData) => {
+        getCombinedTemps(locationToSet).then((tempData) => {
           setTempData(tempData);
           setIsUpdating(false);
 
