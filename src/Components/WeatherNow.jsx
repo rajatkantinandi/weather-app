@@ -10,6 +10,8 @@ export default function WeatherNow({
   setTransform,
   aqi,
   cityName,
+  updateDate,
+  updateTime,
 }) {
   const [comingBtnDisplay, setComingBtnDisplay] = useState(null);
 
@@ -27,6 +29,9 @@ export default function WeatherNow({
         <span className="unit">{unit}</span>
       </div>
       <div className="todaysHighlight data">{weather.description}</div>
+      <div className="data small updateDate">
+        [Updated: {updateDate || ' ______ '} at {updateTime || '__:__'}]
+      </div>
       <div className="maxMin dataBlock">
         <span>
           <span className="arrow up"></span>

@@ -82,7 +82,7 @@ main h4 {
 }
 
 .weather-today {
-  padding: 10px 30px;
+  padding: 10px 25px;
   border-radius: 15px;
   background: rgba(0, 70, 120, 0.4);
   display: flex;
@@ -97,7 +97,8 @@ main h4 {
 
 .todaysHighlight {
   font-size: 1.4rem;
-  line-height: 1.8em;
+  text-align: center;
+  margin: 5px 0;
 }
 
 .data {
@@ -214,7 +215,7 @@ footer a:active {
 .weather-coming {
   display: flex;
   flex-direction: column;
-  padding: 5px 15px 30px 15px;
+  padding: 5px 10px 30px 10px;
   border-radius: 15px;
   background: rgba(0, 120, 70, 0.4);
   text-align: center;
@@ -375,6 +376,57 @@ footer a:active {
 .updateBanner .refresh-btn:hover,
 .updateBanner .refresh-btn:focus {
   background-color: darkgreen;
+}
+
+.updating {
+  color: indigo;
+  font-weight: bold;
+  margin-top: 12vh;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+}
+
+.updating::before {
+  width: 15px;
+  height: 15px;
+  background-color: transparent;
+  display: block;
+  position: relative;
+  content: '';
+  border: 3px dotted indigo;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  margin: 0 5px;
+  animation: spin 2s ease-in-out infinite;
+}
+
+.small {
+  font-size: 0.8em;
+}
+
+.updateDate {
+  text-align: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(350deg);
+  }
+  50% {
+    transform: rotate(360deg);
+  }
+  60% {
+    transform: rotate(370deg);
+  }
+  100% {
+    transform: rotate(720deg);
+  }
 }
 
 @media (max-width: 740px) {
