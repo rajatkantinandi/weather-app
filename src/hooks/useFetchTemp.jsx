@@ -91,8 +91,10 @@ const useFetchTemp = (unit) => {
 };
 
 const getCombinedTemps = async (location, fromLocalStorage) => {
-  let { temp, temp_max, temp_min, locationName, weather } = await fetchTemp(location, fromLocalStorage);
-  let { comingTemps, comingWeather } = await fetchComingTemp(location, fromLocalStorage);
+  let [{ temp, temp_max, temp_min, locationName, weather }, { comingTemps, comingWeather }] = await Promise.all([
+    fetchTemp(location, fromLocalStorage),
+    fetchComingTemp(location, fromLocalStorage),
+  ]);
 
   if (comingTemps) {
     comingTemps[0][0] = Math.max(temp_max, comingTemps[0][0]);
