@@ -26,6 +26,7 @@ body {
   top: 0;
   z-index: 2;
   font-family: 'Lora', serif;
+  box-sizing: border-box;
 }
 
 .header h1 {
