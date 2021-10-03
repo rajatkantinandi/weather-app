@@ -29,12 +29,10 @@ export default function useAQI(location) {
     }
   };
 
-  const {
-    data: {
-      aqi,
-      city: { name },
-    },
-  } = data;
+  const aqiData = data.data;
 
-  return { aqi, cityName: truncate(name, 30) };
+  return {
+    aqi: (aqiData && aqiData.aqi) || 'N/A',
+    cityName: aqiData && aqiData.city && aqiData.city.name ? truncate(aqiData.city.name, 30) : 'Unknown',
+  };
 }
