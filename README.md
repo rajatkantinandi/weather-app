@@ -6,7 +6,7 @@
 
 Using openweathermap API.
 
-Link: [weathere.now.sh](https://weathere.now.sh)
+Link: [weathere.vercel.app](https://weathere.vercel.app)
 
 - Now Progressive WebAPP
 - Can be installed on your device
