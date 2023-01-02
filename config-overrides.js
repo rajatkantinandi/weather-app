@@ -1,16 +1,16 @@
-const workboxPlugin = require('workbox-webpack-plugin');
+const { InjectManifest } = require('workbox-webpack-plugin');
 const path = require('path');
 
 module.exports = {
   webpack: function (config, env) {
     if (env === 'production') {
-      const workboxConfigProd = {
-        swSrc: path.join(__dirname, 'public', 'service-worker.js'),
-        swDest: 'service-worker.js',
-        importWorkboxFrom: 'disabled',
-      };
       config = removeSWPrecachePlugin(config);
-      config.plugins.push(new workboxPlugin.InjectManifest(workboxConfigProd));
+      config.plugins.push(
+        new InjectManifest({
+          swDest: 'service-worker.js',
+          swSrc: path.join(process.cwd(), 'public', 'service-worker.js'),
+        }),
+      );
     }
     return config;
   },
