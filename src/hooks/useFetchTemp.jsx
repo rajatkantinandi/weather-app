@@ -30,33 +30,39 @@ const useFetchTemp = (unit) => {
   useEffect(() => {
     try {
       // Initialize geolocation & get lat & long
-      navigator.geolocation.getCurrentPosition(function (position) {
-        //Get Location & Link
-        const locationToSet = {
-          lat: position.coords.latitude,
-          long: position.coords.longitude,
-        };
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          //Get Location & Link
+          const locationToSet = {
+            lat: position.coords.latitude,
+            long: position.coords.longitude,
+          };
 
-        setLocation(locationToSet);
-        localStorage.setItem('location', JSON.stringify(locationToSet));
-        // Fetch data from api based on updated location
-        setIsUpdating(true);
-        getCombinedTemps(locationToSet).then((tempData) => {
-          setTempData(tempData);
-          setIsUpdating(false);
+          setLocation(locationToSet);
+          localStorage.setItem('location', JSON.stringify(locationToSet));
+          // Fetch data from api based on updated location
+          setIsUpdating(true);
+          getCombinedTemps(locationToSet).then((tempData) => {
+            setTempData(tempData);
+            setIsUpdating(false);
 
-          if (tempData.locationName && tempData.comingWeather) {
-            // update date set as new data is fetched
-            const now = new Date();
-            const time = padZero(now.getHours()) + ':' + padZero(now.getMinutes());
-            const date = now.toDateString();
-            setUpdateDate(date);
-            setUpdateTime(time);
-            localStorage.setItem('updateDate', date);
-            localStorage.setItem('updateTime', time);
-          }
-        });
-      });
+            if (tempData.locationName && tempData.comingWeather) {
+              // update date set as new data is fetched
+              const now = new Date();
+              const time = padZero(now.getHours()) + ':' + padZero(now.getMinutes());
+              const date = now.toDateString();
+              setUpdateDate(date);
+              setUpdateTime(time);
+              localStorage.setItem('updateDate', date);
+              localStorage.setItem('updateTime', time);
+            }
+          });
+        },
+        () => {
+          alert('Enable location on your browser');
+        },
+        { enableHighAccuracy: true },
+      );
     } catch (e) {
       alert('Enable location on your browser');
     }
